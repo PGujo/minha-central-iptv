@@ -31,6 +31,7 @@ jobs:
       - name: Instalar Dependências
         run: |
           pip install playwright
+          pip install playwright PyGithub
           playwright install chromium
           playwright install-deps
 
