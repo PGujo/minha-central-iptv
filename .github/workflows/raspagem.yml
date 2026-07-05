@@ -1,0 +1,45 @@
+name: Roda com Tailscale (Exit Node)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *' # Roda automaticamente todos os dias às 12:00
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Conectar ao Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:github-actions
+
+      - name: Forçar Roteamento via Exit Node
+        run: sudo tailscale up --exit-node=100.107.255.120 --accept-routes=true
+
+      - name: Instalar Dependências
+        run: |
+          pip install playwright
+          playwright install chromium
+          playwright install-deps
+
+      - name: Rodar script
+        run: python espelho_raspa.py
+
+      - name: Upload Debug
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-tailscale-results
+          path: |
+            debug_espelho.txt
+            debug_visual.png

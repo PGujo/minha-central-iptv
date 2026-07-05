@@ -1,0 +1,30 @@
+name: Atualizador
+
+on:
+  workflow_dispatch:
+ # schedule:
+ #   - cron: '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Instalar dependências
+        run: |
+          pip install playwright PyGithub
+          playwright install chromium
+      - name: Rodar script
+        env:
+          MEU_TOKEN_GITHUB: ${{ secrets.MEU_TOKEN_GITHUB }}
+        run: python verificadorchat.py
+      - name: Salvar Debug
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-screenshots
+          path: "*.png"
