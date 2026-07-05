@@ -18,11 +18,12 @@ jobs:
           python-version: '3.9'
 
       - name: Conectar ao Tailscale
-        uses: tailscale/github-action@v4
+        uses: tailscale/github-action@v2
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:github-actions
+          args: --exit-node=100.107.255.120 --accept-routes=true
 
       - name: Forçar Roteamento via Exit Node
         run: sudo tailscale up --reset --exit-node=100.107.255.120 --accept-routes=true
