@@ -35,7 +35,7 @@ jobs:
           playwright install-deps
 
       - name: Rodar script
-        run: python espelho_raspa.py
+        run: python verificadorplay.py
 
       - name: Upload Debug
         uses: actions/upload-artifact@v4
