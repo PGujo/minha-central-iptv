@@ -25,7 +25,7 @@ jobs:
           tags: tag:github-actions
 
       - name: Forçar Roteamento via Exit Node
-        run: sudo tailscale up --exit-node=100.107.255.120 --accept-routes=true
+        run: sudo tailscale up --reset --exit-node=100.107.255.120 --accept-routes=true
 
       - name: Instalar Dependências
         run: |
